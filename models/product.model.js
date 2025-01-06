@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const { default: mongoose, Schema } = require("mongoose");
 
 const productSchema = new mongoose.Schema({
   shopId: { type: Schema.Types.ObjectId, ref: "Shop", required: true },
