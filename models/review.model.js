@@ -1,8 +1,8 @@
-const { default: mongoose, Schema } = require("mongoose");
+const mongoose = require("mongoose");
 
 const reviewSchema = new mongoose.Schema({
-  productId: { type: Schema.Types.ObjectId, ref: "Product" },
-  customerId: { type: Schema.Types.ObjectId, ref: "Customer" },
+  productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+  customerId: { type: mongoose.Schema.Types.ObjectId, ref: "Customer" },
   rating: Number,
   comment: String,
   createdAt: { type: Date, default: Date.now },

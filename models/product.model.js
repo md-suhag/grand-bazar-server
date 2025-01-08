@@ -1,11 +1,15 @@
-const { default: mongoose, Schema } = require("mongoose");
+const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
-  shopId: { type: Schema.Types.ObjectId, ref: "Shop", required: true },
+  shopId: { type: mongoose.Schema.Types.ObjectId, ref: "Shop", required: true },
   name: { type: String, required: true },
   description: { type: String },
   price: { type: Number, required: true },
-  categoryId: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    required: true,
+  },
   images: [
     {
       public_id: {
@@ -20,7 +24,7 @@ const productSchema = new mongoose.Schema({
   ],
   stock: { type: Number, required: true },
   discount: { type: Number },
-  reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
+  reviews: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
 });

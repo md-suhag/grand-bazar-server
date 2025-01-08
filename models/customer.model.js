@@ -1,9 +1,9 @@
-const { default: mongoose, Schema } = require("mongoose");
+const mongoose = require("mongoose");
 
 const customerSchema = new mongoose.Schema(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User" },
-    orders: { type: Schema.Types.objectId, ref: "Order" },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    orders: { type: mongoose.Schema.Types.objectId, ref: "Order" },
   },
   { timestamps: true }
 );

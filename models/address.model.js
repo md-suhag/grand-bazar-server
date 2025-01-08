@@ -1,7 +1,7 @@
-const { default: mongoose, Schema } = require("mongoose");
+const mongoose = require("mongoose");
 
 const addressSchema = new mongoose.Schema({
-  userId: { type: Schema.Types.ObjectId, ref: "User" },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   fullName: String,
   phone: String,
   addressLine1: String,

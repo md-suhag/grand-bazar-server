@@ -1,8 +1,12 @@
-const { default: mongoose, Schema } = require("mongoose");
+const mongoose = require("mongoose");
 
 const shopSchema = new mongoose.Schema(
   {
-    vendorId: { type: Schema.Types.ObjectId, ref: "Vendor", required: true },
+    vendorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Vendor",
+      required: true,
+    },
     logo: {
       public_id: {
         type: String,
@@ -16,7 +20,7 @@ const shopSchema = new mongoose.Schema(
     description: String,
     products: [
       {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
       },
     ],
