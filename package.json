@@ -1,5 +1,5 @@
 {
-  "name": "bazar-field-server",
+  "name": "grand-bazar-server",
   "version": "1.0.0",
   "description": "Multivendor ecommerce application with mern stack",
   "main": "index.js",

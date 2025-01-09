@@ -21,26 +21,39 @@ const register = catchAsync(async (req, res, next) => {
 
   const file = req.file;
 
-  if (!file) return next(new AppError("Please Upload profile image"));
+  if (!file) return next(new AppError("Please Upload profile image", 400));
   const result = await uploadFilesToCloudinary([file]);
 
   const profileImg = {
     public_id: result[0].public_id,
     url: result[0].url,
   };
-  const newUser = new User({
+  const user = await User.create({
     name,
     email,
     password: hashPassword,
     profileImg,
     role,
   });
-  await newUser.save();
 
-  sendToken(res, newUser, 201, "user created");
+  sendToken(res, user, 201, "user created");
 });
 
-const login = catchAsync(async (req, res, next) => {});
+const login = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
+  if (!user) {
+    return next(new AppError("Invalid email or password", 404));
+  }
+
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+  if (!isPasswordCorrect) {
+    return next(new AppError("Invalid email or password", 404));
+  }
+
+  sendToken(res, user, 200, "login successful!");
+});
 
 module.exports = {
   login,

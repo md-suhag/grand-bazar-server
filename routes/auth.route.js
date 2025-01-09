@@ -1,11 +1,15 @@
 const express = require("express");
 const { login, register } = require("../controllers/auth.controller");
-const { registerValidator, validateHandler } = require("../lib/validators");
+const {
+  registerValidator,
+  validateHandler,
+  loginValidator,
+} = require("../lib/validators");
 const { profileImg } = require("../middlewares/multer");
 
 const authRouter = express.Router();
 
-authRouter.post("/login", login);
+authRouter.post("/login", loginValidator(), validateHandler, login);
 authRouter.post(
   "/register",
   profileImg,
