@@ -1,5 +1,7 @@
 const AppError = require("../utils/appError");
 
+const envMode = process.env.NODE_ENV.trim();
+
 const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.message = err.message || "Internal server error";
@@ -27,11 +29,13 @@ const globalErrorHandler = (err, req, res, next) => {
     const message = `Your token has expired. Please try again later.`;
     err = new AppError(message, 400);
   }
-
+  if (envMode === "DEVELOPMENT") {
+    console.log(err);
+  }
   return res.status(err.statusCode).json({
     success: false,
     message: err.message,
-    stack: process.env.NODE_ENV === "DEVELOPMENT" ? err?.stack : null,
+    stack: envMode === "DEVELOPMENT" ? err?.stack : null,
     error: err,
   });
 };
