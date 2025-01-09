@@ -7,5 +7,7 @@ const flashSaleSchema = new mongoose.Schema({
   endDate: { type: Date, required: true },
 });
 
-export const FlashSale =
+const FlashSale =
   mongoose.models.FlashSale || mongoose.model("FlashSale", flashSaleSchema);
+
+module.exports = FlashSale;

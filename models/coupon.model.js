@@ -7,5 +7,6 @@ const couponSchema = new mongoose.Schema({
   isActive: Boolean,
 });
 
-export const Coupon =
-  mongoose.models.Coupon || mongoose.model("Coupon", couponSchema);
+const Coupon = mongoose.models.Coupon || mongoose.model("Coupon", couponSchema);
+
+module.exports = Coupon;

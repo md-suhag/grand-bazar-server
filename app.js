@@ -31,7 +31,7 @@ app.use(
 app.use("/api/auth", authRouter);
 
 app.get("/", (req, res) => {
-  res.send("server is working");
+  res.send("Welcome! Multivendor ecommerce application's server is working.");
 });
 
 // Global Error handler middleware
