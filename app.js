@@ -7,6 +7,7 @@ const notFound = require("./middlewares/notFound");
 const authRouter = require("./routes/auth.route");
 const { v2: cloudinary } = require("cloudinary");
 const cookieParser = require("cookie-parser");
+const productRouter = require("./routes/product.route");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -29,6 +30,7 @@ app.use(
 
 // api endpoints
 app.use("/api/auth", authRouter);
+app.use("/api/products", productRouter);
 
 app.get("/", (req, res) => {
   res.send("Welcome! Multivendor ecommerce application's server is working.");

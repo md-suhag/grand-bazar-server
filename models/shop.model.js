@@ -17,6 +17,10 @@ const shopSchema = new mongoose.Schema(
         required: true,
       },
     },
+    name: {
+      type: String,
+      required: true,
+    },
     description: String,
     products: [
       {
