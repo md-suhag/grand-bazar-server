@@ -6,6 +6,7 @@ const Category = require("../models/category.model");
 const Shop = require("../models/shop.model");
 const AppError = require("../utils/appError");
 const { uploadFilesToCloudinary } = require("../lib/helper");
+const { v2: cloudinary } = require("cloudinary");
 
 const getSingleProduct = catchAsync(async (req, res, next) => {
   const { productId } = req.params;
@@ -74,4 +75,43 @@ const createProduct = catchAsync(async (req, res, next) => {
   });
 });
 
-module.exports = { getAllProducts, getSingleProduct, createProduct };
+const deleteProduct = catchAsync(async (req, res, next) => {
+  const { productId } = req.params;
+
+  const product = await Product.findById(productId).populate({
+    path: "shopId",
+    select: "vendorId",
+    populate: { path: "vendorId", select: "userId" },
+  });
+
+  if (!product) {
+    return next(new AppError("Product not found", 404));
+  }
+  if (
+    product.shopId?.vendorId?.userId?.toString() !== req.user._id.toString() &&
+    req.user.role !== "admin"
+  ) {
+    return next(new AppError("Unauthorized to delete this product", 403));
+  }
+
+  if (product.images && product.images.length > 0) {
+    await Promise.all(
+      product.images.map((image) =>
+        cloudinary.uploader.destroy(image.public_id)
+      )
+    );
+  }
+
+  await Product.findByIdAndDelete(productId);
+
+  return res
+    .status(200)
+    .json({ success: true, message: "Product deleted successfully" });
+});
+
+module.exports = {
+  getAllProducts,
+  getSingleProduct,
+  createProduct,
+  deleteProduct,
+};

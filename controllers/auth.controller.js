@@ -1,8 +1,10 @@
 const catchAsync = require("../utils/catchAsync");
 const AppError = require("../utils/appError");
 const User = require("./../models/user.model");
+const Vendor = require("../models/vendor.model");
 const bcrypt = require("bcrypt");
 const { sendToken, uploadFilesToCloudinary } = require("../lib/helper");
+const { default: mongoose } = require("mongoose");
 
 const register = catchAsync(async (req, res, next) => {
   const { name, email, password, role } = req.body;
@@ -28,15 +30,29 @@ const register = catchAsync(async (req, res, next) => {
     public_id: result[0].public_id,
     url: result[0].url,
   };
-  const user = await User.create({
-    name,
-    email,
-    password: hashPassword,
-    profileImg,
-    role,
-  });
+  const session = await mongoose.startSession();
+  session.startTransaction();
 
-  sendToken(res, user, 201, "user created");
+  try {
+    const user = await User.create(
+      [{ name, email, password: hashPassword, profileImg, role }],
+      { session }
+    );
+
+    if (role === "vendor") {
+      await Vendor.create([{ userId: user[0]._id }], { session });
+    }
+
+    await session.commitTransaction();
+    session.endSession();
+
+    sendToken(res, user[0], 201, "User created successfully");
+  } catch (error) {
+    console.log(error);
+    await session.abortTransaction();
+    session.endSession();
+    next(new AppError("User registration failed. Please try again!", 500));
+  }
 });
 
 const login = catchAsync(async (req, res, next) => {
