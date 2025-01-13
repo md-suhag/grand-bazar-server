@@ -22,5 +22,6 @@ const imgUploader = multer({
 
 const profileImg = imgUploader.single("profileImg");
 const productImages = imgUploader.array("images", 4);
+const logo = imgUploader.single("logo");
 
-module.exports = { profileImg, productImages };
+module.exports = { profileImg, productImages, logo };

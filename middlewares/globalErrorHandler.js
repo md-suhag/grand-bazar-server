@@ -14,7 +14,9 @@ const globalErrorHandler = (err, req, res, next) => {
 
   // Duplicate key error (MongoDB)
   if (err.code === 11000) {
-    const message = `Duplicate key ${Object.keys(err.keyValue)} entered`;
+    const message = `Duplicate keyValue "${Object.entries(
+      err.keyValue
+    )}" entered`;
     err = new AppError(message, 400);
   }
 
